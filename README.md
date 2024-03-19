@@ -1,4 +1,4 @@
-# ArduinoLibrarySkeleton
+# Log
 
 Skeleton for Arduino library
 
@@ -45,5 +45,5 @@ For library development using Visual Studio Code, the following tools and framew
 
 ## Website
 
-Further information can be found on [GitHub](https://github.com/steftri/ArduinoLibrarySkeleton).
+Further information can be found on [GitHub](https://github.com/steftri/Debug).
 
