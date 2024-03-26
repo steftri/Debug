@@ -1,3 +1,4 @@
+
 #ifndef _LIB_DEBUG_H_
 #define _LIB_DEBUG_H_
 
@@ -7,23 +8,50 @@
 #define MAX_DEBUG_MSG_LENGTH 80
 
 
-typedef enum 
+
+
+// typedef void (*TCallback)(const char* pc_Message);
+
+
+class DebugActionInterface
 {
-  Trace,
-  Info, 
-  Warning, 
-  Error, 
-  FatalError,
-  None
-} EDebugLevel;
-
-typedef void (*TCallback)(const char* pc_Message);
+public:  
+  virtual void Callback(const char* pc_Message) = 0;
+};
 
 
-void debug_init(const TCallback p_Callback, const EDebugLevel e_MinDebugLevel = Error);
-void debug_finish(void);
 
-void debug(const EDebugLevel e_LogLevel, const char* pc_Message);
+
+class Debug
+{
+public:  
+  typedef enum 
+  {
+    Trace,
+    Info, 
+    Warning, 
+    Error, 
+    FatalError,
+    None
+  } ELevel;
+
+private:
+  ELevel me_MinDebugLevel;
+  DebugActionInterface *mp_ActionInterface;
+
+public: 
+  Debug(void);
+
+  void init(DebugActionInterface *p_ActionInterface, const ELevel e_MinDebugLevel = Error);
+  void finish(void);
+
+  void msg(const ELevel e_LogLevel, const char* pc_Message);
+};
+
+
+
+
+
 
 
 #endif

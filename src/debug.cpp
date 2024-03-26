@@ -3,28 +3,34 @@
 #include "debug.h"
 
 
-EDebugLevel ge_MinDebugLevel = Error;
-TCallback gp_Callback = nullptr;
 
 
-void debug_init(const TCallback p_Callback, const EDebugLevel e_MinDebugLevel)
+Debug::Debug(void)
 {
-  gp_Callback = p_Callback;
-  ge_MinDebugLevel = e_MinDebugLevel;
-}
-
-
-void debug_finish(void)
-{
-  ge_MinDebugLevel = None;
-  gp_Callback = nullptr;
+  me_MinDebugLevel = Error;
+  mp_ActionInterface = nullptr;
 }
 
 
 
-void debug(const EDebugLevel e_DebugLevel, const char* pc_Message)
+void Debug::init(DebugActionInterface *p_ActionInterface, const ELevel e_MinDebugLevel)
 {
-  if((e_DebugLevel>=ge_MinDebugLevel) && (gp_Callback!=nullptr))
+  mp_ActionInterface = p_ActionInterface;
+  me_MinDebugLevel = e_MinDebugLevel;
+}
+
+
+void Debug::finish(void)
+{
+  me_MinDebugLevel = None;
+  mp_ActionInterface = nullptr;
+}
+
+
+
+void Debug::msg(const ELevel e_DebugLevel, const char* pc_Message)
+{
+  if((e_DebugLevel>=me_MinDebugLevel) && (mp_ActionInterface!=nullptr))
   {
     char ac_Message[MAX_DEBUG_MSG_LENGTH+1];
     const char* pc_DebugLevel = "";
@@ -40,7 +46,7 @@ void debug(const EDebugLevel e_DebugLevel, const char* pc_Message)
     }
 
     (void)snprintf(ac_Message, sizeof(ac_Message), "%s: %s", pc_DebugLevel, pc_Message);
-    gp_Callback(ac_Message);
+    mp_ActionInterface->Callback(ac_Message);
   }
 }
 
